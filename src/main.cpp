@@ -22,7 +22,7 @@
 //real time clock module object
 RTC_DS1307 Rtc;
 //display object
-MD_Parola display = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
+MD_Parola ledMatrix = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
 //DS18xx temperature sensor via OneWire interface
 OneWire oneWire(THERMO);
 DallasTemperature sensors(&oneWire);
@@ -53,9 +53,9 @@ void setup() {
   Rtc.begin();
   sensors.begin();
   setSyncProvider(getTimeUnix);
-  display.begin();
+  ledMatrix.begin();
 
-  display.setIntensity(0);
+  ledMatrix.setIntensity(0);
 
   //short click
   button.attachClick(offsetMinutes);
@@ -86,7 +86,7 @@ void refreshDisplay()
   if(isLightSensorTriggered(brightnessMeasure()))
     showTemperature(getTemperature());
   else showTime(hour(),minute());
-  display.displayAnimate();
+  ledMatrix.displayAnimate();
 }
 
 time_t getTimeUnix()
@@ -99,7 +99,7 @@ void showTime(uint8_t h,uint8_t m)
   char hhmm_str[6];
   sprintf(hhmm_str,"%02d:%02d",h,m);
 
-  display.displayText(hhmm_str,PA_CENTER,0,0,PA_PRINT,PA_NO_EFFECT);
+  ledMatrix.displayText(hhmm_str,PA_CENTER,0,0,PA_PRINT,PA_NO_EFFECT);
 }
 
 void showTemperature(float t)
@@ -108,7 +108,7 @@ void showTemperature(float t)
   dtostrf(t,3,1,temp);
   strcat(temp,"C");
 
-  display.displayText(temp,PA_CENTER,0,0,PA_PRINT,PA_NO_EFFECT);
+  ledMatrix.displayText(temp,PA_CENTER,0,0,PA_PRINT,PA_NO_EFFECT);
 }
 
 float getTemperature()
